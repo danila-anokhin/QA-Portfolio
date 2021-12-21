@@ -1,0 +1,21 @@
+{- 
+Опишите функцию squareDigitsSum :: Integral a => a -> [a], определяющую для заданного целого
+x последовательность, где каждый очередной элемент равен сумме цифр квадрата предыдущего элемента.
+Последовательность должна составляться из своих же частей с помощью map и вспомогательной функции
+получения суммы цифр числа.
+Кроме упомянутой map при решении понадобятся функции div и mod.
+Пример запуска
+Main> take 6 $ squareDigitsSum 136
+[136,28,19,10,1,1]
+ -}
+squareDigitsSum x = seqn
+  where
+    square 0 = 0
+    square xs = xs `mod` 10 + square (xs `div` 10)
+    seqn = [x] 
+           ++ map (\y -> square (y * y)) (seqn)
+
+main = do
+  print $ take 5 $ squareDigitsSum 136
+  print $ take 5 $ squareDigitsSum 128
+  print $ take 5 $ squareDigitsSum 26
