@@ -1,0 +1,54 @@
+#include <iostream>
+#include <cmath>
+#include <vector>
+#include <ctime>
+
+using namespace std;
+
+void print(int* x, int n) {                  //вывод массива на экран
+	for (int i = 0; i < n; i++)
+		cout << x[i] << " ";
+}
+
+void quicksort(int* x, int L, int r, int n) { //быстрая сортировка
+	//L = 0; r = n - 1;                     //определяем левые и правые границы массива
+	int m = x[(L + r) / 2];               //выбираем за опорный элемент середину массива
+	int i = L, j = r;
+	while (i <= j) {                      //в цикле меняем местами элементы так, что слева опорного эл-та будут меньшие его,справа - большие
+		while (x[i] < m) i++;
+		while (x[j] > m) j--;
+		if (i <= j) {
+			swap(x[i], x[j]);
+			i++;
+			j--;
+		}
+	}
+	if (j - L > 0) quicksort(x, L, j, n);  //если левый подмассив содержит больше 1 элемента, то вызываем функцию для отрезка от L до j
+	if (r - i > 0) quicksort(x, i, r, n); //если правый подмассив содержит больше 1 элемента, то вызываем функцию для отрезка от i до r 
+}
+
+int main() {
+	setlocale(LC_ALL, "RUS");
+	int n, L, r;                         //вводим размерность массива
+	int s;
+	cout << "Выберите размерность массива, введите: \n1 - 500, 2 - 1000, 3 - 5000, 4 - 10000, 5 - 15000\n";
+	cin >> s;
+	switch (s) {
+	case 1: {n = 500; break; }
+	case 2: {n = 1000; break; }
+	case 3: {n = 5000; break; }
+	case 4: {n = 10000; break; }
+	case 5: {n = 15000; break; }
+	default: cout << "Неправильно введённые данные";
+	}
+	int* x = new int[n];
+	for (int i = 0; i < n; i++) x[i] = rand() % INT_MAX;         //создали массив
+	L = 0; r = n - 1;                     //определяем левые и правые границы массива
+	unsigned int start_time = clock(); // начальное время
+	quicksort(x, L, r, n);
+	unsigned int end_time = clock(); // конечное время
+	unsigned int search_time = end_time - start_time; // искомое время
+	print(x, n);                  //выводим на экран
+	cout << "\nВремя выполнения сортировки " << search_time << " мс = " << search_time * 1.0 / 1000 << " сек\n";
+	system("pause");
+}

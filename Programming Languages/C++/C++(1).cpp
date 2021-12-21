@@ -1,0 +1,53 @@
+//Дан неориентированный граф.Вывести количество вершин, смежных с данной.
+
+#include <iostream>
+#include <vector>
+
+using namespace std;
+
+int main()
+{
+	int n, m, k;
+	cout << "Number of vertice = ";
+	cin >> n;
+	vector <vector <int>> smezh(n);
+	cout << "Number of adjacent vertices = ";
+	cin >> m;
+
+	for (int i = 0; i < m; i++)
+	{
+		int a, b;
+		cin >> a >> b;
+		smezh[a].push_back(b);
+		smezh[b].push_back(a);
+	}
+
+	cout << "Our vertice = ";
+	cin >> k;
+	int size = smezh[k].size();
+	int kol = 0;
+	for (int i = 0; i < size; i++) 
+	{
+		kol++;
+		cout << smezh[k][i] << " ";
+	}
+	cout << endl << "Number of vertices: " << kol << endl;
+	system("pause");
+	return 0;
+}
+
+//Входные данные
+//Number of vertice(количество вершин) = 7 
+//Number of adjacent vertices (количество ребер) = 8 
+//0 1
+//0 2
+//0 4
+//0 5
+//1 3
+//2 5
+//4 6
+//5 6
+//Our vertice (какую вершину проверяем) = 0
+//Результат
+//Number of vertices :
+//1 2 4 5
