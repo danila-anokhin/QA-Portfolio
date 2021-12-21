@@ -288,6 +288,20 @@ having count(model) > 1
 select maker, type from mt
 where maker in (select maker from mt group by maker having count(maker) = 1)
 
+80 Задача: "Найти производителей любой 
+компьютерной техники, у которых нет 
+моделей ПК, не представленных в таблице PC."
+
+Запрос:
+select distinct maker from Product 
+where maker not in
+(select maker from Product
+where model in
+(select distinct model from Product
+where type = 'PC'
+EXCEPT 
+select distinct model from PC))
+
 -------------------------------------------------------------------------------------------------
 Схема БД:
 Рассматривается БД кораблей, участвовавших во второй мировой войне. Имеются следующие отношения:
@@ -633,3 +647,29 @@ UNION
 select point, date, sum(out) as sum_out, null as sum_inc from Outcome
 group by point, date) as sum_out_inc
 group by point, date
+
+61 Задача: "Посчитать остаток денежных средств на 
+всех пунктах приема для базы данных с 
+отчетностью не чаще одного раза в день."
+
+Запрос:
+select sum(sum) from
+(select point, sum(inc) as sum from Income_o
+group by point
+UNION
+select point, -sum(out) as sum from Outcome_o
+group by point) as t
+
+62 Задача: "Посчитать остаток денежных средств на 
+всех пунктах приема на начало дня 15/04/01 для 
+базы данных с отчетностью не чаще одного раза в день."
+
+Запрос:
+select sum(sum) as sum from
+(select point, sum(inc) as sum from Income_o
+where date < '2001-04-15 00:00:00.000'
+group by point
+UNION 
+select point, -sum(out) as sum from Outcome_o
+where date < '2001-04-15 00:00:00.000'
+group by point) as t
