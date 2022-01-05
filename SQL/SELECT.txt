@@ -673,3 +673,26 @@ UNION
 select point, -sum(out) as sum from Outcome_o
 where date < '2001-04-15 00:00:00.000'
 group by point) as t
+
+64 Задача: "Используя таблицы Income и Outcome, 
+для каждого пункта приема определить дни, когда 
+был приход, но не было расхода и наоборот.
+Вывод: пункт, дата, тип операции (inc/out), 
+денежная сумма за день."
+
+Запрос:
+select i.point, i.date, i.type, i.sum from 
+(select point, date, 'inc' as type, sum(inc) as sum from income
+group by point, date) i left join 
+(select point, date, 'out' as type, sum(out) as sum from outcome
+group by point, date) o
+on i.point = o.point AND i.date = o.date
+where o.point IS NULL AND o.date IS NULL
+UNION
+select o.point, o.date, o.type, o.sum from 
+(select point, date, 'inc' as type, sum(inc) as sum from income
+group by point, date) i right join 
+(select point, date, 'out' as type, sum(out) as sum from outcome
+group by point, date) o
+on i.point = o.point AND i.date = o.date
+where i.point IS NULL AND i.date IS NULL
